@@ -41,12 +41,11 @@ const Upload = () => {
             })
         }
 
-
         for (let i = 0; i < files.length; i++) {
             formData.append('files', files[i]);
         }
 
-        const res = await axios.post('/api/upload', formData, {
+        const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/upload`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -74,7 +73,7 @@ const Upload = () => {
         e.preventDefault();
         const body = { outputLocale, diarization, accuracy };
 
-        const res = await axios.post('/api/transcode', body)
+        const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/transcode`, body)
         // console.log(res.data)
         if (res.status !== 200) {
             setProcessBtnLoading(true)

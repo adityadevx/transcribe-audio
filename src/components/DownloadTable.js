@@ -35,8 +35,6 @@ const DownloadTable = () => {
         }
     };
 
-
-
     const handleSearch = async (e) => {
         // setSearchVal(e.target.value)
         // console.log(searchVal)
@@ -119,7 +117,6 @@ const DownloadTable = () => {
     const handleDelete = async () => {
         // console.log(checkdBoxId)
         // console.log('delete')
-
         if (checkdBoxId.length > 0) {
             await Promise.all(
                 checkdBoxId.map(async (item) => {
@@ -156,6 +153,11 @@ const DownloadTable = () => {
         }
 
     };
+
+    const textFileNaming = (value) => {
+        const splicedText = value.split('.');
+        return splicedText[0] + '.txt';
+    }
 
 
     const handlePrevPage = () => {
@@ -199,13 +201,9 @@ const DownloadTable = () => {
         }
     };
 
-
-
     useEffect(() => {
         fetchJobs()
     }, [recordsPerPage, deleted])
-
-
 
     return (
         <>
@@ -266,7 +264,7 @@ const DownloadTable = () => {
 
                                     return (
                                         <Tr key={index}>
-                                            <Td>{job.data_name}</Td>
+                                            <Td>{textFileNaming(job.data_name)}</Td>
                                             <Td>{capitalize(job.status)}</Td>
                                             <Td>{(job.created_at).substr(0, 10)}</Td>
                                             <Td>{capitalize(job.config.transcription_config.operating_point)}</Td>
