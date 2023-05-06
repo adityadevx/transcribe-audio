@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, Link, Flex, Spacer, Select, InputGroup, InputRightElement, Input, Stack, Button, Checkbox, ButtonGroup, useToast } from "@chakra-ui/react"
 import { DownloadIcon, DeleteIcon } from '@chakra-ui/icons'
+import LoginContext from '../context/LoginContext'
+import { useNavigate } from 'react-router-dom'
 
 
 
 const DownloadTable = () => {
-
-
-
+    const { validateLogin } = useContext(LoginContext);
+    const navigate = useNavigate();
 
     const toast = useToast();
     const [jobs, setJobs] = useState([])
@@ -19,6 +20,7 @@ const DownloadTable = () => {
     const [disableNext, setDisableNext] = useState(false);
     const [deleted, setDeleted] = useState(false);
     const [headerCheckboxState, setHeaderCheckboxState] = useState(false);
+    const [filesDeleted, setFilesDeleted] = useState(0);
 
     const lastIndexOfLastRecord = currentPage * recordsPerPage;
     const firstIndexOfLastRecord = lastIndexOfLastRecord - recordsPerPage;
@@ -48,8 +50,12 @@ const DownloadTable = () => {
         setJobs(filteredJobs)
     };
 
-
     async function fetchJobs() {
+        const validate = await validateLogin();
+        if (!validate) {
+            navigate('/login');
+            return;
+        }
         const res = await fetch('https://asr.api.speechmatics.com/v2/jobs/', {
             headers: {
                 // Authorization: `Bearer 1iazkusYjxyoY0QOd9jTohYaWmzebFmg`
@@ -96,7 +102,7 @@ const DownloadTable = () => {
         }
     }
 
-    const handleDownload = () => {
+    const handleDownload = async () => {
         // console.log(checkdBoxId)
         if (checkdBoxId.length === 0) {
             return toast({
@@ -110,7 +116,34 @@ const DownloadTable = () => {
         }
 
         else {
-            // code to download files
+            try {
+                const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/zip`, {
+                    headers: {
+                        "Content-Type": "application/zip",
+                        "Accept": "application/zip"
+                    },
+                })
+                const data = await res.blob();
+                const url = window.URL.createObjectURL(new Blob([data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'folder.zip');
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+
+                console.log(data);
+            } catch (error) {
+                console.log(error.message);
+                return toast({
+                    title: "Error",
+                    description: "Something went wrong",
+                    status: "error",
+                    duration: 2000,
+                    isClosable: true,
+                    position: 'top-center'
+                });
+            }
         }
     }
 
@@ -130,11 +163,12 @@ const DownloadTable = () => {
                     console.log(data);
                 })
             );
-            setDeleted(true); // set deleted state to true to re-render the component
+            // setDeleted(true); // set deleted state to true to re-render the component
+            setFilesDeleted(filesDeleted + checkdBoxId.length);
             setCheckdBoxId([]);
             return toast({
                 title: "Files deleted successfully",
-                description: "Files deleted successfully",
+                description: "Selected files have been deleted",
                 status: "success",
                 duration: 2000,
                 isClosable: true,
@@ -203,10 +237,11 @@ const DownloadTable = () => {
 
     useEffect(() => {
         fetchJobs()
-    }, [recordsPerPage, deleted])
+    }, [recordsPerPage, filesDeleted])
 
     return (
         <>
+
             <Box mx={2}>
                 <h1>Files</h1>
                 <Text>

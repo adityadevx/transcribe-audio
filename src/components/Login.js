@@ -1,26 +1,45 @@
 import { Flex, Stack, Box, Button, useColorModeValue, Heading, FormControl, FormLabel, Input } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from '@chakra-ui/react';
 
-const defaultIdPass = {
-    email: 'admin',
-    password: 'admin'
-}
 
 export default function Loign() {
     const navigate = useNavigate();
+    const toast = useToast();
+
     const [inputFields, setInputFields] = useState({ email: '', password: '' });
 
     const handleInputChange = (e) => {
         setInputFields({ ...inputFields, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
+
         e.preventDefault();
         // console.log(inputFields)
-        if (inputFields.email === defaultIdPass.email && inputFields.password === defaultIdPass.password) {
-            navigate('/upload');
-            // console.log('login success')
+        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(inputFields)
+        })
+        const data = await res.json()
+        // console.log(data)
+        // console.log(data.status)
+
+        if (res.status === 200) {
+            document.cookie = `token=${data.token}`
+            navigate('/upload')
+        }
+        else {
+            return toast({
+                title: "Error",
+                description: "Invalid Credentials",
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+                position: 'top-center'
+            })
         }
     };
 
@@ -61,6 +80,7 @@ export default function Loign() {
                         </FormControl>
                         <Stack spacing={10}>
                             <Button
+
                                 type='submit'
                                 onClick={e => handleSubmit(e)}
                                 bg={'blue.400'}

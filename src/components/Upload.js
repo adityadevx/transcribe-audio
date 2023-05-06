@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Flex, Stack, Box, Button, useColorModeValue, Heading, FormControl, FormLabel, Input, Radio, RadioGroup } from '@chakra-ui/react'
 import axios from 'axios'
 import { useToast } from '@chakra-ui/react'
@@ -97,6 +97,30 @@ const Upload = () => {
         setAccuracy(value);
         // console.log(value)
     };
+
+    const validateUser = async () => {
+        // console.log('inside validate user')
+        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/validateuser`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token: document.cookie.split('=')[1] })
+        })
+        // console.log(data);
+        if (res.status === 200) {
+            return
+        }
+        if (res.status === 401) {
+            navigate('/login')
+        }
+    };
+
+    useEffect(() => {
+        setTimeout(() => {
+            validateUser()
+        }, 1000)
+    },)
+
+
 
 
     return (
