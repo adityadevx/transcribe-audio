@@ -18,7 +18,6 @@ const DownloadTable = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [disablePrev, setDisablePrev] = useState(false);
     const [disableNext, setDisableNext] = useState(false);
-    const [deleted, setDeleted] = useState(false);
     const [headerCheckboxState, setHeaderCheckboxState] = useState(false);
     const [filesDeleted, setFilesDeleted] = useState(0);
 
@@ -56,19 +55,36 @@ const DownloadTable = () => {
             navigate('/login');
             return;
         }
-        const res = await fetch('https://asr.api.speechmatics.com/v2/jobs/', {
+
+        // fetching the file names from the download folder
+        const downloadFolderItems = await fetch(`${process.env.REACT_APP_BASE_URL}/api/downloadlist`)
+        const downloadlist = await downloadFolderItems.json()
+        // console.log(downloadlist)
+
+        // fetching the jobs from the speechmatics api
+        const fetchedJobs = await fetch('https://asr.api.speechmatics.com/v2/jobs/', {
             headers: {
                 // Authorization: `Bearer 1iazkusYjxyoY0QOd9jTohYaWmzebFmg`
                 Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
             }
         })
-        const { jobs } = await res.json()
+        const { jobs } = await fetchedJobs.json()
         // console.log(jobs)
-        setJobs(jobs)
+
+        // filtering the jobs based on the file names in the download folder
+        const sameValues = jobs.filter((element) => downloadlist.includes(element.data_name))
+        // console.log(sameValues, 'sameValues')
+
+        // removing the duplicate values from the array
+        const filteredArr = sameValues.filter((item, index, self) => {
+            return self.findIndex(i => i.data_name === item.data_name) === index;
+        });
+        // console.log(filteredArr, 'filteredArr')
+        setJobs(filteredArr)
     }
     const handleEntriesChange = (e) => {
         setRecordsPerPage(e.target.value)
-        console.log(recordsPerPage)
+        // console.log(recordsPerPage)
         // console.log('rendered')
     }
 
@@ -117,11 +133,18 @@ const DownloadTable = () => {
 
         else {
             try {
+                const fileNames = checkdBoxId.map((item) => item.value)
+                // add .txt to the file names
+                const newOk = fileNames.map((item) => item.split('.')[0] + '.txt')
+
+                // console.log(fileNames)
                 const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/zip`, {
+                    method: 'POST',
                     headers: {
-                        "Content-Type": "application/zip",
-                        "Accept": "application/zip"
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/zip'
                     },
+                    body: JSON.stringify(newOk),
                 })
                 const data = await res.blob();
                 const url = window.URL.createObjectURL(new Blob([data]));
@@ -131,10 +154,11 @@ const DownloadTable = () => {
                 document.body.appendChild(link);
                 link.click();
                 link.remove();
+                // console.log(data);
+                // console.log(data)
 
-                console.log(data);
             } catch (error) {
-                console.log(error.message);
+                // console.log(error.message);
                 return toast({
                     title: "Error",
                     description: "Something went wrong",
@@ -160,7 +184,7 @@ const DownloadTable = () => {
                         }
                     });
                     const data = await res.json();
-                    console.log(data);
+                    // console.log(data);
                 })
             );
             // setDeleted(true); // set deleted state to true to re-render the component

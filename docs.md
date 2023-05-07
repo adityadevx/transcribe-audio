@@ -1,1 +1,1 @@
-// table not reloading after deleting a row
+// login logout button fix
