@@ -1,7 +1,8 @@
 import { Flex, Stack, Box, Button, useColorModeValue, Heading, FormControl, FormLabel, Input } from '@chakra-ui/react';
-import { useState, useContext, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
+
 
 
 export default function Loign() {
@@ -39,8 +40,24 @@ export default function Loign() {
                 position: 'top-center'
             })
         }
-
     };
+
+
+    const validateLogin = async () => {
+
+        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/validateUser`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: document.cookie.split('=')[1] })
+        })
+        await res.json()
+        if (res.status === 200) navigate('/upload');
+        else return
+    };
+
+    useEffect(() => {
+        validateLogin()
+    }, []);
 
 
     return (

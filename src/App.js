@@ -11,14 +11,14 @@ function App() {
       <Router>
 
         <Routes>
-          <Route path="/" element={
+          {/* <Route path="" element={
             <>
               <LoginState>
                 <Navbar />
               </LoginState>
               <Upload />
             </>
-          } />
+          } /> */}
           <Route path="/upload" element={
             <>
               <LoginState>
@@ -38,6 +38,14 @@ function App() {
               <LoginState>
                 <DownloadTable />
               </LoginState>
+            </>
+          } />
+          <Route path="/" element={
+            <>
+              <LoginState>
+                <Navbar />
+              </LoginState>
+              <Login />
             </>
           } />
           <Route path="/login" element={

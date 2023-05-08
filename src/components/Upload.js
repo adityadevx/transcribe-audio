@@ -3,7 +3,6 @@ import { Flex, Stack, Box, Button, useColorModeValue, Heading, FormControl, Form
 import axios from 'axios'
 import { useToast } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
-import { type } from '@testing-library/user-event/dist/type'
 
 const Upload = () => {
     const toast = useToast()
