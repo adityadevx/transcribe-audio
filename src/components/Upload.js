@@ -3,6 +3,7 @@ import { Flex, Stack, Box, Button, useColorModeValue, Heading, FormControl, Form
 import axios from 'axios'
 import { useToast } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
+import { type } from '@testing-library/user-event/dist/type'
 
 const Upload = () => {
     const toast = useToast()
@@ -50,7 +51,9 @@ const Upload = () => {
                 'Content-Type': 'multipart/form-data',
             },
         });
-        // console.log(res.data)
+        // const data = await res.json()
+
+
 
         //  if the status is 200, then the file has been uploaded successfully
         if (res.status === 200) {
@@ -65,6 +68,9 @@ const Upload = () => {
                 position: 'top-center'
             })
         }
+
+
+
         // handle error
     };
 
@@ -117,7 +123,7 @@ const Upload = () => {
     useEffect(() => {
         setTimeout(() => {
             validateUser()
-        }, 1000)
+        }, 1000);
     },)
 
 

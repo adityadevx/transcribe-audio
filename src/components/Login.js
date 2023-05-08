@@ -1,5 +1,5 @@
 import { Flex, Stack, Box, Button, useColorModeValue, Heading, FormControl, FormLabel, Input } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
 
@@ -8,6 +8,7 @@ export default function Loign() {
     const navigate = useNavigate();
     const toast = useToast();
 
+
     const [inputFields, setInputFields] = useState({ email: '', password: '' });
 
     const handleInputChange = (e) => {
@@ -15,33 +16,32 @@ export default function Loign() {
     };
 
     const handleSubmit = async (e) => {
-
         e.preventDefault();
-        // console.log(inputFields)
         const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/login`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(inputFields)
-        })
-        const data = await res.json()
-        // console.log(data)
-        // console.log(data.status)
-
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(inputFields),
+        });
+        const data = await res.json();
         if (res.status === 200) {
-            document.cookie = `token=${data.token}`
-            navigate('/upload')
+            document.cookie = `token=${data.token}`;
+            navigate('/upload');
         }
         else {
             return toast({
-                title: "Error",
-                description: "Invalid Credentials",
+                title: "Invalid Credentials",
+                description: "Please check your email and password",
                 status: "error",
-                duration: 9000,
+                duration: 5000,
                 isClosable: true,
                 position: 'top-center'
             })
         }
+
     };
+
 
     return (
         <Flex

@@ -175,31 +175,58 @@ const DownloadTable = () => {
         // console.log(checkdBoxId)
         // console.log('delete')
         if (checkdBoxId.length > 0) {
-            await Promise.all(
-                checkdBoxId.map(async (item) => {
-                    const res = await fetch(`https://asr.api.speechmatics.com/v2/jobs/${item.id}`, {
-                        method: 'DELETE',
-                        headers: {
-                            Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
-                        }
-                    });
-                    const data = await res.json();
-                    // console.log(data);
+            try {
+                const files = checkdBoxId.map((item) => item.value.split('.')[0] + '.txt')
+                const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/delete`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(files),
                 })
-            );
-            // setDeleted(true); // set deleted state to true to re-render the component
-            setFilesDeleted(filesDeleted + checkdBoxId.length);
-            setCheckdBoxId([]);
-            return toast({
-                title: "Files deleted successfully",
-                description: "Selected files have been deleted",
-                status: "success",
-                duration: 2000,
-                isClosable: true,
-                position: 'top-center'
-            });
+
+                if (res.status === 200) {
+                    setFilesDeleted(filesDeleted + checkdBoxId.length);
+                    setCheckdBoxId([]);
+                    return toast({
+                        title: "Files deleted successfully",
+                        description: "Selected files have been deleted",
+                        status: "success",
+                        duration: 2000,
+                        isClosable: true,
+                        position: 'top-center'
+                    });
+                }
+                else if (res.status !== 200) {
+                    setFilesDeleted(filesDeleted + checkdBoxId.length);
+                    setCheckdBoxId([]);
+                    return toast({
+                        title: "Error",
+                        description: "Something went wrong",
+                        status: "error",
+                        duration: 2000,
+                        isClosable: true,
+                        position: 'top-center'
+                    });
+                }
+            } catch (error) {
+                // console.log(error.message)
+                setFilesDeleted(filesDeleted + checkdBoxId.length);
+                setCheckdBoxId([]);
+                return toast({
+                    title: "Error",
+                    description: "Something went wrong",
+                    status: "error",
+                    duration: 2000,
+                    isClosable: true,
+                    position: 'top-center'
+                });
+
+            }
+
         }
         else {
+            setCheckdBoxId([]);
             return toast({
                 title: "No files selected",
                 description: "Please select files to delete",
@@ -209,7 +236,6 @@ const DownloadTable = () => {
                 position: 'top-center'
             });
         }
-
     };
 
     const textFileNaming = (value) => {

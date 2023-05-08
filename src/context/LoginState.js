@@ -4,6 +4,7 @@ import LoginContext from './LoginContext';
 const LoginState = ({ children }) => {
 
     const validateLogin = async () => {
+
         const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/validateUser`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
