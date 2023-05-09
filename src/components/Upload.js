@@ -132,27 +132,14 @@ const Upload = () => {
         // console.log(value)
     };
 
-    const validateUser = async () => {
-        // console.log('inside validate user')
-        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/validateuser`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ token: document.cookie.split('=')[1] })
-        })
-        // console.log(data);
-        if (res.status === 200) {
-            return
-        }
-        if (res.status === 401) {
-            navigate('/login')
-        }
-    };
+
 
     useEffect(() => {
-        setTimeout(() => {
-            validateUser()
-        }, 1000);
-    },)
+        if (document.cookie === '') {
+            navigate('/login')
+        }
+    }, []);
+
 
 
 

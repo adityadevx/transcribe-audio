@@ -18,6 +18,12 @@ export default function Navbar() {
     const [loginBtn, setLoginBtn] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
+    const handleLogOutBtn = (e) => {
+        e.preventDefault();
+        Cookies.remove("token");
+        navigate("/login")
+    }
+
     const handleLoginBtn = (e) => {
         e.preventDefault();
         if (loginBtn) {
@@ -95,7 +101,7 @@ export default function Navbar() {
                                 />
                             </MenuButton>
                             <MenuList>
-                                <MenuItem onClick={handleLoginBtn} >Logout</MenuItem>
+                                <MenuItem onClick={(e) => { handleLogOutBtn(e) }}>Logout</MenuItem>
                                 <MenuItem onClick={(e) => { navigate('/changepassword') }}>Change Password</MenuItem>
 
                             </MenuList>
@@ -112,7 +118,7 @@ export default function Navbar() {
                         </Stack>
                     </Box>
                 ) : null}
-            </Box>
+            </Box >
         </>
     );
 }

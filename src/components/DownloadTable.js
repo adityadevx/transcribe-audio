@@ -1,13 +1,11 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, Link, Flex, Spacer, Select, InputGroup, InputRightElement, Input, Stack, Button, Checkbox, ButtonGroup, useToast } from "@chakra-ui/react"
 import { DownloadIcon, DeleteIcon } from '@chakra-ui/icons'
-import LoginContext from '../context/LoginContext'
 import { useNavigate } from 'react-router-dom'
 
 
 
 const DownloadTable = () => {
-    const { validateLogin } = useContext(LoginContext);
     const navigate = useNavigate();
 
     const toast = useToast();
@@ -51,10 +49,9 @@ const DownloadTable = () => {
     };
 
     async function fetchJobs() {
-        const validate = await validateLogin();
-        if (!validate) {
-            navigate('/login');
-            return;
+
+        if (document.cookie === '') {
+            navigate('/login')
         }
 
         // fetching the file names from the download folder
