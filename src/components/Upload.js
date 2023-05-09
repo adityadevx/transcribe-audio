@@ -24,78 +24,100 @@ const Upload = () => {
 
 
     const handleUpload = async (e) => {
-        setUploadBtnLoading(true)
+        setUploadBtnLoading(true);
         e.preventDefault();
         const formData = new FormData();
 
         if (files.length === 0) {
-            setUploadBtnLoading(false)
-            setProcessDisabled(true)
+            setUploadBtnLoading(false);
+            setProcessDisabled(true);
             return toast({
                 title: "No File Selected",
                 description: "Please select a file to upload",
                 status: "error",
                 duration: 5000,
                 isClosable: true,
-                position: 'top-center'
-            })
+                position: "top-center",
+            });
         }
 
         for (let i = 0; i < files.length; i++) {
-            formData.append('files', files[i]);
+            formData.append("files", files[i]);
         }
 
-        const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/upload`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
-        // const data = await res.json()
+        try {
+            const res = await axios.post(
+                `${process.env.REACT_APP_BASE_URL}/api/upload`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
 
-
-
-        //  if the status is 200, then the file has been uploaded successfully
-        if (res.status === 200) {
-            setProcessDisabled(false)
-            setUploadBtnLoading(false)
+            if (res.status === 200) {
+                setProcessDisabled(false);
+                setUploadBtnLoading(false);
+                return toast({
+                    title: "File Uploaded",
+                    description: "Your file has been uploaded successfully",
+                    status: "success",
+                    duration: 5000,
+                    isClosable: true,
+                    position: "top-center",
+                });
+            }
+        } catch (error) {
+            // Handle error and display error message
+            console.log(error);
+            setUploadBtnLoading(false);
             return toast({
-                title: "File Uploaded",
-                description: "Your file has been uploaded successfully",
-                status: "success",
+                title: "Error Uploading File",
+                description: "There was an internal error while uploading your file",
+                status: "error",
                 duration: 5000,
                 isClosable: true,
-                position: 'top-center'
-            })
+                position: "top-center",
+            });
         }
-
-
-
-        // handle error
+        // Empty the files array
+        // files.length = 0; 
     };
+
 
     const handleDownload = async (e) => {
         setProcessBtnLoading(true)
         e.preventDefault();
         const body = { outputLocale, diarization, accuracy };
 
-        const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/transcode`, body)
-        // console.log(res.data)
-        if (res.status !== 200) {
-            setProcessBtnLoading(true)
-        }
-        if (res.status === 200) {
-            setProcessBtnLoading(false)
+        try {
+            const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/transcode`, body);
+            if (res.status === 200) {
+                setFiles([]);
+                setProcessBtnLoading(false)
+                return toast({
+                    title: "File Processed",
+                    description: "Your file has been processed successfully",
+                    status: "success",
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'top-center'
+                })
+            }
+        } catch (error) {
+            setProcessBtnLoading(false);
             return toast({
-                title: "File Processed",
-                description: "Your file has been processed successfully",
-                status: "success",
+                title: "Error Occurred",
+                description: "There was an internal error while processing your file",
+                status: "error",
                 duration: 5000,
                 isClosable: true,
                 position: 'top-center'
             })
         }
-
     };
+
     const handleOutputLocaleChange = (value) => {
         setOutputLocale(value)
         // console.log(value)
@@ -211,7 +233,7 @@ const Upload = () => {
                     </RadioGroup>
                 </Stack>
 
-                <Stack direction='row' spacing={4} align='center' mt={6}>
+                <Stack direction='row' spacing={4} align='center' mt={6} marginTop={10}>
                     <Button colorScheme='teal' variant='solid'
                         isLoading={processBtnLoading} loadingText='Please wait...'
                         onClick={(e) => handleDownload(e)}

@@ -4,6 +4,7 @@ import Upload from './components/Upload';
 import DownloadTable from './components/DownloadTable';
 import LoginState from './context/LoginState';
 import Navbar from './components/Navbar';
+import ChangePassword from './components/ChangePassword';
 
 function App() {
   return (
@@ -50,10 +51,16 @@ function App() {
           } />
           <Route path="/login" element={
             <>
+              <Login />
+            </>
+          } />
+          <Route path="/changepassword" element={
+            <>
               <LoginState>
                 <Navbar />
+                <ChangePassword />
               </LoginState>
-              <Login />
+
             </>
           } />
         </Routes>
