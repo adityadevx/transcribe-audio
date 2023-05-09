@@ -67,7 +67,7 @@ export default function Navbar() {
                         onClick={isOpen ? onClose : onOpen}
                     />
                     <HStack spacing={8} alignItems={'center'}>
-                        <Box>Logo</Box>
+                        <Box>Transcribe</Box>
                         <HStack
                             as={'nav'}
                             spacing={4}
