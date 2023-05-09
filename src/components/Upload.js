@@ -220,7 +220,7 @@ const Upload = () => {
                     </RadioGroup>
                 </Stack>
 
-                <Stack direction='row' spacing={4} align='center' mt={6} marginTop={10}>
+                <Stack direction='row' spacing={4} align='center' mt={6} marginBottom={10}>
                     <Button colorScheme='teal' variant='solid'
                         isLoading={processBtnLoading} loadingText='Please wait...'
                         onClick={(e) => handleDownload(e)}
