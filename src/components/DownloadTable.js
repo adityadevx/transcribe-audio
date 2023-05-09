@@ -57,7 +57,7 @@ const DownloadTable = () => {
         // fetching the file names from the download folder
         const downloadFolderItems = await fetch(`${process.env.REACT_APP_BASE_URL}/api/downloadlist`)
         const downloadlist = await downloadFolderItems.json()
-        console.log(downloadlist)
+        // console.log(downloadlist)
 
         // fetching the jobs from the speechmatics api
         const fetchedJobs = await fetch('https://asr.api.speechmatics.com/v2/jobs/', {
@@ -67,7 +67,7 @@ const DownloadTable = () => {
             }
         })
         const { jobs } = await fetchedJobs.json()
-        console.log(jobs)
+        // console.log(jobs)
 
         // filtering the jobs based on the file names in the download folder
         const sameValues = jobs.filter((element) => downloadlist.includes(element.data_name))
