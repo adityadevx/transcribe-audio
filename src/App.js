@@ -43,9 +43,6 @@ function App() {
           } />
           <Route path="/" element={
             <>
-              <LoginState>
-                <Navbar />
-              </LoginState>
               <Login />
             </>
           } />

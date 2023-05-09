@@ -40,7 +40,7 @@ const ChangePassword = () => {
         if (response.status === 200) {
             toast({
                 title: "Password Changed Successfully",
-                description: "Please login again",
+                description: "Password Updated !!!",
                 status: "success",
                 duration: 3000,
                 isClosable: true,
