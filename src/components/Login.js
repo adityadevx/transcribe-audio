@@ -51,6 +51,7 @@ export default function Loign() {
             body: JSON.stringify({ token: document.cookie.split('=')[1] })
         })
         await res.json()
+        // console.log(data)
         if (res.status === 200) navigate('/upload');
         else return
     };
