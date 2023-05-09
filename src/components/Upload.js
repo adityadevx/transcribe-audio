@@ -85,7 +85,14 @@ const Upload = () => {
         }
         if (res.status === 200) {
             setProcessBtnLoading(false)
-            navigate('/download')
+            return toast({
+                title: "File Processed",
+                description: "Your file has been processed successfully",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+                position: 'top-center'
+            })
         }
 
     };

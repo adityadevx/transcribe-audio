@@ -28,9 +28,10 @@ const DownloadTable = () => {
     const totalPages = Math.ceil(jobs.length / recordsPerPage);
 
     const handleHeaderCheckboxChange = (event) => {
+
         setHeaderCheckboxState(event.target.checked);
         if (event.target.checked) {
-            setCheckdBoxId(jobs.map((item) => ({ id: item.id, value: item.id })));
+            setCheckdBoxId(jobs.map((item) => ({ id: item.id, value: item.data_name })));
         } else {
             setCheckdBoxId([]);
         }
@@ -150,7 +151,7 @@ const DownloadTable = () => {
                 const url = window.URL.createObjectURL(new Blob([data]));
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', 'folder.zip');
+                link.setAttribute('download', 'TranscribeFiles.zip');
                 document.body.appendChild(link);
                 link.click();
                 link.remove();
