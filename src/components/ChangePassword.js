@@ -1,18 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from '@chakra-ui/button'
-import { Box, Flex, Heading, Stack } from '@chakra-ui/layout'
+import { Box, Flex, Heading, Stack, } from '@chakra-ui/layout'
 import { Input } from '@chakra-ui/input'
-import { FormControl, FormLabel } from '@chakra-ui/form-control'
+import { FormControl, FormLabel, } from '@chakra-ui/form-control'
 import { useColorModeValue } from '@chakra-ui/color-mode'
 import { useToast } from '@chakra-ui/toast'
+import { InputGroup, InputRightElement } from '@chakra-ui/input'
 import { useNavigate } from 'react-router-dom'
-import Cookies from 'js-cookie'
+// import Cookies from 'js-cookie'
 
 
 const ChangePassword = () => {
     const toast = useToast()
     const navigate = useNavigate()
     const [formDetails, setFormDetails] = useState({ password: '', confirmPassword: '' })
+    const [show, setShow] = React.useState(false)
+    const handleClick = () => setShow(!show)
 
     const handleInputChange = (e) => {
         setFormDetails({ ...formDetails, [e.target.name]: e.target.value })
@@ -60,6 +63,11 @@ const ChangePassword = () => {
         }
     }
 
+    useEffect(() => {
+        if (document.cookie === '') {
+            navigate('/login')
+        }
+    }, [])
 
     return (
         <>
@@ -90,13 +98,30 @@ const ChangePassword = () => {
                             </FormControl>
                             <FormControl id="password">
                                 <FormLabel>Re Enter Your New Password</FormLabel>
+                                <InputGroup size='md'>
+                                    <Input
+                                        pr='4.5rem'
+                                        value={formDetails.confirmPassword}
+                                        onChange={(e) => { handleInputChange(e) }}
+                                        name="confirmPassword"
+                                        type={show ? 'text' : 'password'}
+                                        placeholder='Enter password'
+                                    />
+                                    <InputRightElement width='4.5rem'>
+                                        <Button h='1.75rem' size='sm' onClick={handleClick}>
+                                            {show ? 'Hide' : 'Show'}
+                                        </Button>
+                                    </InputRightElement>
+                                </InputGroup>
 
+
+                                {/* 
                                 <Input type="password"
                                     value={formDetails.confirmPassword}
                                     onChange={(e) => { handleInputChange(e) }}
                                     name="confirmPassword"
                                     required
-                                />
+                                /> */}
                             </FormControl>
                             <Stack spacing={10}>
                                 <Button

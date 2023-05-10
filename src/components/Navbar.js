@@ -73,7 +73,7 @@ export default function Navbar() {
                         onClick={isOpen ? onClose : onOpen}
                     />
                     <HStack spacing={8} alignItems={'center'}>
-                        <Box>Transcribe</Box>
+                        <Box fontSize={'xl'} fontWeight={600}>Transcribe</Box>
                         <HStack
                             as={'nav'}
                             spacing={4}
@@ -86,7 +86,7 @@ export default function Navbar() {
                         </HStack>
                     </HStack>
                     <Flex alignItems={'center'}>
-                        <Menu>
+                        {/* <Menu>
                             <MenuButton
                                 as={Button}
                                 rounded={'full'}
@@ -105,7 +105,14 @@ export default function Navbar() {
                                 <MenuItem onClick={(e) => { navigate('/changepassword') }}>Change Password</MenuItem>
 
                             </MenuList>
-                        </Menu>
+                        </Menu> */}
+                        <Button colorScheme='green' size='sm' mx={1} onClick={(e) => { navigate('/changepassword') }}>
+                            Change Pass
+                        </Button>
+
+                        <Button colorScheme='red' size='sm' onClick={(e) => { handleLogOutBtn(e) }}>
+                            Logout
+                        </Button>
                     </Flex>
                 </Flex>
 
