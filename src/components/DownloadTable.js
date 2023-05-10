@@ -70,7 +70,7 @@ const DownloadTable = () => {
         // console.log(jobs)
 
         // filtering the jobs based on the file names in the download folder
-        const sameValues = jobs.filter((element) => downloadlist.includes(element.data_name))
+     const sameValues = jobs.filter((element) => downloadlist.includes(element.data_name.split(".")[0]));
         // console.log(sameValues, 'sameValues')
 
         // removing the duplicate values from the array
