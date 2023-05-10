@@ -1,9 +1,8 @@
 import {
     Box, Flex, IconButton, Button, Stack, Link,
     useColorModeValue,
-    useDisclosure,
+    useDisclosure, HStack
 } from '@chakra-ui/react';
-import { Avatar, Menu, MenuButton, MenuItem, MenuList, HStack } from '@chakra-ui/react';
 
 import LoginContext from '../context/LoginContext';
 import { useContext, useEffect, useState } from 'react';
@@ -11,12 +10,14 @@ import { useNavigate } from 'react-router-dom';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import Cookies from 'js-cookie';
 
+
 export default function Navbar() {
     const navigate = useNavigate();
     // const { isOpen, onToggle } = useDisclosure();
     const { validateLogin } = useContext(LoginContext);
     const [loginBtn, setLoginBtn] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
+
 
     const handleLogOutBtn = (e) => {
         e.preventDefault();
@@ -34,6 +35,7 @@ export default function Navbar() {
             navigate("/login")
         }
     }
+
 
     useEffect(() => {
         async function validate() {
@@ -106,10 +108,13 @@ export default function Navbar() {
 
                             </MenuList>
                         </Menu> */}
+
+                        <Button colorScheme='green' size='sm' mx={1} onClick={() => { navigate('/key') }} >
+                            API KEY
+                        </Button>
                         <Button colorScheme='green' size='sm' mx={1} onClick={(e) => { navigate('/changepassword') }}>
                             Change Pass
                         </Button>
-
                         <Button colorScheme='red' size='sm' onClick={(e) => { handleLogOutBtn(e) }}>
                             Logout
                         </Button>
@@ -126,6 +131,7 @@ export default function Navbar() {
                     </Box>
                 ) : null}
             </Box >
+
         </>
     );
 }

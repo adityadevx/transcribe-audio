@@ -5,6 +5,8 @@ import DownloadTable from './components/DownloadTable';
 import LoginState from './context/LoginState';
 import Navbar from './components/Navbar';
 import ChangePassword from './components/ChangePassword';
+import Modal from './components/Modal';
+import ChangeKey from './components/ChangeKey';
 
 function App() {
   return (
@@ -57,8 +59,13 @@ function App() {
                 <Navbar />
                 <ChangePassword />
               </LoginState>
-
             </>
+          } />
+          <Route path="/key" element={
+            <LoginState>
+              <Navbar />
+              <ChangeKey />
+            </LoginState>
           } />
         </Routes>
       </Router>

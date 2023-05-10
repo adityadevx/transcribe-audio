@@ -53,32 +53,47 @@ const DownloadTable = () => {
         if (document.cookie === '') {
             navigate('/login')
         }
+        try {
+            const keyResponse = await fetch(`${process.env.REACT_APP_BASE_URL}/api/sendapikey`);
+            const keyData = await keyResponse.json();
 
-        // fetching the file names from the download folder
-        const downloadFolderItems = await fetch(`${process.env.REACT_APP_BASE_URL}/api/downloadlist`)
-        const downloadlist = await downloadFolderItems.json()
-        // console.log(downloadlist)
+            // fetching the file names from the download folder
+            const downloadFolderItems = await fetch(`${process.env.REACT_APP_BASE_URL}/api/downloadlist`)
+            const downloadlist = await downloadFolderItems.json()
+            // console.log(downloadlist)
 
-        // fetching the jobs from the speechmatics api
-        const fetchedJobs = await fetch('https://asr.api.speechmatics.com/v2/jobs/', {
-            headers: {
-                // Authorization: `Bearer 1iazkusYjxyoY0QOd9jTohYaWmzebFmg`
-                Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
-            }
-        })
-        const { jobs } = await fetchedJobs.json()
-        // console.log(jobs)
 
-        // filtering the jobs based on the file names in the download folder
-        const sameValues = jobs.filter((element) => downloadlist.includes(element.data_name.split(".")[0]));
-        // console.log(sameValues, 'sameValues')
+            // fetching the jobs from the speechmatics api
+            const fetchedJobs = await fetch('https://asr.api.speechmatics.com/v2/jobs/', {
+                headers: {
+                    // Authorization: `Bearer 1iazkusYjxyoY0QOd9jTohYaWmzebFmg`
+                    Authorization: `Bearer ${keyData.key}`
+                }
+            })
+            const { jobs } = await fetchedJobs.json()
+            // console.log(jobs)
 
-        // removing the duplicate values from the array
-        const filteredArr = sameValues.filter((item, index, self) => {
-            return self.findIndex(i => i.data_name === item.data_name) === index;
-        });
-        // console.log(filteredArr, 'filteredArr')
-        setJobs(filteredArr)
+            // filtering the jobs based on the file names in the download folder
+            const sameValues = jobs.filter((element) => downloadlist.includes(element.data_name.split(".")[0]));
+            // console.log(sameValues, 'sameValues')
+
+            // removing the duplicate values from the array
+            const filteredArr = sameValues.filter((item, index, self) => {
+                return self.findIndex(i => i.data_name === item.data_name) === index;
+            });
+            // console.log(filteredArr, 'filteredArr')
+            setJobs(filteredArr)
+        } catch (error) {
+            // console.log(error)
+            return toast({
+                title: "Error",
+                description: "Some error in API key or Api Limit exceeded",
+                status: "error",
+                duration: 2000,
+                isClosable: true,
+                position: 'top-center'
+            })
+        }
     }
     const handleEntriesChange = (e) => {
         setRecordsPerPage(e.target.value)
@@ -144,9 +159,6 @@ const DownloadTable = () => {
                     },
                     body: JSON.stringify(newOk),
                 })
-
-
-
                 const data = await res.blob();
                 const url = window.URL.createObjectURL(new Blob([data]));
                 const link = document.createElement('a');
@@ -155,9 +167,6 @@ const DownloadTable = () => {
                 document.body.appendChild(link);
                 link.click();
                 link.remove();
-                // console.log(data);
-                // console.log(data)
-
             } catch (error) {
                 // console.log(error.message);
                 return toast({
