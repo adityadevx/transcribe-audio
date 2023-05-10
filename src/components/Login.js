@@ -33,6 +33,7 @@ export default function Loign() {
             navigate('/upload');
         }
         else {
+            setInputFields({ email: '', password: '' });
             return toast({
                 title: "Invalid Credentials",
                 description: "Please check your email and password",
@@ -73,6 +74,7 @@ export default function Loign() {
                                 value={inputFields.email}
                                 onChange={handleInputChange}
                                 name="email"
+                                placeholder="Enter email"
                                 required
                             />
                         </FormControl>
