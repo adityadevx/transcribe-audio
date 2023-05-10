@@ -36,6 +36,7 @@ const ChangePassword = () => {
             },
             body: JSON.stringify({ newPassword: formDetails.password })
         })
+        setFormDetails({ password: '', confirmPassword: '' })
         const data = await response.json()
         if (response.status === 200) {
             toast({

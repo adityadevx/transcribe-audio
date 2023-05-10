@@ -1,6 +1,6 @@
-import { Flex, Stack, Box, Button, useColorModeValue, Heading, FormControl, FormLabel, Input } from '@chakra-ui/react';
+import { Flex, Stack, Box, Button, useColorModeValue, Heading, FormControl, FormLabel, Input, InputRightElement, InputGroup } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
-import { useFetcher, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
 
 
@@ -8,6 +8,8 @@ import { useToast } from '@chakra-ui/react';
 export default function Loign() {
     const navigate = useNavigate();
     const toast = useToast();
+    const [show, setShow] = useState(false)
+    const handleClick = () => setShow(!show)
 
 
     const [inputFields, setInputFields] = useState({ email: '', password: '' });
@@ -76,13 +78,28 @@ export default function Loign() {
                         </FormControl>
                         <FormControl id="password">
                             <FormLabel>Password</FormLabel>
+                            <InputGroup size='md'>
+                                <Input
+                                    pr='4.5rem'
+                                    onChange={handleInputChange}
+                                    type={show ? 'text' : 'password'}
+                                    placeholder='Enter password'
+                                    name='password'
+                                    value={inputFields.password}
+                                />
+                                <InputRightElement width='4.5rem'>
+                                    <Button h='1.75rem' size='sm' onClick={handleClick}>
+                                        {show ? 'Hide' : 'Show'}
+                                    </Button>
+                                </InputRightElement>
+                            </InputGroup>
 
-                            <Input type="password"
+                            {/* <Input type="password"
                                 value={inputFields.password}
                                 onChange={handleInputChange}
                                 name="password"
                                 required
-                            />
+                            /> */}
                         </FormControl>
                         <Stack spacing={10}>
                             <Button
