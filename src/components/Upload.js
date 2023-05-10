@@ -22,7 +22,6 @@ const Upload = () => {
         setFiles(e.target.files)
     };
 
-
     const handleUpload = async (e) => {
         setUploadBtnLoading(true);
         e.preventDefault();
@@ -152,84 +151,94 @@ const Upload = () => {
                 justify={'center'}
                 direction={'column'}
                 bg={useColorModeValue('gray.50', 'gray.800')}>
-                <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
-                    <Stack align={'center'}>
-                        <Heading fontSize={'4xl'}>Upload your file</Heading>
-                    </Stack>
-                    <Box>
-                        <Box
-                            w={'full'}
-                            bg={'lightblue'}
-                        >
-                            <FormControl px={50} py={55} >
-                                <FormLabel textAlign={'center'}>No files Selected</FormLabel>
-                                <Input type="file" border={'none'} accept='audio/*' multiple onChange={e => handleFiles(e)} />
-                            </FormControl>
-                            <Stack spacing={6} >
-                                <Button
-                                    bg={'blue.400'}
-                                    color={'white'}
-                                    _hover={{
-                                        bg: 'blue.500',
-                                    }}
-                                    isLoading={uploadBtnLoading}
-                                    onClick={(e) => handleUpload(e)}
-                                >
-                                    Upload
-                                </Button>
+                {processDisabled && (
+                    <>
+                        <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+                            <Stack align={'center'}>
+                                <Heading fontSize={'4xl'}>Upload your file</Heading>
                             </Stack>
-                        </Box>
-                    </Box>
-                </Stack>
-
-                <Stack mt={4}>
-                    <label >Accuracy</label>
-                    <RadioGroup defaultValue='enhanced' onChange={handleAccuracyChange} >
-                        <Stack spacing={4} direction='row'>
-                            <Radio value='enhanced'>
-                                Enhanced
-                            </Radio>
-                            <Radio value='standard'>Standard</Radio>
+                            <Box>
+                                <Box
+                                    w={'full'}
+                                    bg={'lightblue'}
+                                >
+                                    <FormControl px={50} py={55} >
+                                        <FormLabel textAlign={'center'}>No files Selected</FormLabel>
+                                        <Input type="file" border={'none'} accept='audio/*' multiple onChange={e => handleFiles(e)} />
+                                    </FormControl>
+                                    <Stack spacing={6} >
+                                        <Button
+                                            bg={'blue.400'}
+                                            color={'white'}
+                                            _hover={{
+                                                bg: 'blue.500',
+                                            }}
+                                            isLoading={uploadBtnLoading}
+                                            onClick={(e) => handleUpload(e)}
+                                        >
+                                            Upload
+                                        </Button>
+                                    </Stack>
+                                </Box>
+                            </Box>
                         </Stack>
-                    </RadioGroup>
-                </Stack>
+                    </>
+                )}
+                {!processDisabled && (
 
-                <Stack mt={4}>
-                    <label >Output Locale</label>
-                    <RadioGroup defaultValue='en-US' onChange={handleOutputLocaleChange} >
-                        <Stack spacing={4} direction='row'>
-                            <Radio value='en-US'>
-                                US English
-                            </Radio>
-                            <Radio value='en-GB'>British English</Radio>
-                            <Radio value='en-AU'>Australian English</Radio>
+                    <>
+
+                        <Stack mt={4}>
+                            <label >Accuracy</label>
+                            <RadioGroup defaultValue='enhanced' onChange={handleAccuracyChange} >
+                                <Stack spacing={4} direction='row'>
+                                    <Radio value='enhanced'>
+                                        Enhanced
+                                    </Radio>
+                                    <Radio value='standard'>Standard</Radio>
+                                </Stack>
+                            </RadioGroup>
                         </Stack>
-                    </RadioGroup>
-                </Stack>
 
-                <Stack mt={4} >
-                    <label>Diarization</label>
-                    <RadioGroup defaultValue='none' onChange={handleDiarizationChange}>
-                        <Stack spacing={10} direction='row'>
-                            <Radio value='none'>
-                                None
-                            </Radio>
-                            <Radio value='speaker'>Speaker</Radio>
-                            <Radio value='channel'>Channel</Radio>
+                        <Stack mt={4}>
+                            <label >Output Locale</label>
+                            <RadioGroup defaultValue='en-US' onChange={handleOutputLocaleChange} >
+                                <Stack spacing={4} direction='row'>
+                                    <Radio value='en-US'>
+                                        US English
+                                    </Radio>
+                                    <Radio value='en-GB'>British English</Radio>
+                                    <Radio value='en-AU'>Australian English</Radio>
+                                </Stack>
+                            </RadioGroup>
                         </Stack>
-                    </RadioGroup>
-                </Stack>
 
-                <Stack direction='row' spacing={4} align='center' mt={6} marginBottom={10}>
-                    <Button colorScheme='teal' variant='solid'
-                        isLoading={processBtnLoading} loadingText='Please wait...'
-                        onClick={(e) => handleDownload(e)}
-                        isDisabled={processDisabled}
-                    >
-                        Process
-                    </Button>
-                </Stack>
-            </Flex>
+                        <Stack mt={4} >
+                            <label>Diarization</label>
+                            <RadioGroup defaultValue='none' onChange={handleDiarizationChange}>
+                                <Stack spacing={10} direction='row'>
+                                    <Radio value='none'>
+                                        None
+                                    </Radio>
+                                    <Radio value='speaker'>Speaker</Radio>
+                                    <Radio value='channel'>Channel</Radio>
+                                </Stack>
+                            </RadioGroup>
+                        </Stack>
+
+                        <Stack direction='row' spacing={4} align='center' mt={6} marginBottom={10}>
+                            <Button colorScheme='teal' variant='solid'
+                                isLoading={processBtnLoading} loadingText='Please wait...'
+                                onClick={(e) => handleDownload(e)}
+                                isDisabled={processDisabled}
+                            >
+                                Process
+                            </Button>
+                        </Stack>
+                    </>
+                )
+                }
+            </Flex >
         </>
     )
 }

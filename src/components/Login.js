@@ -20,23 +20,48 @@ export default function Loign() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(inputFields),
-        });
-        const data = await res.json();
-        if (res.status === 200) {
-            document.cookie = `token=${data.token}`;
-            navigate('/upload');
-        }
-        else {
-            setInputFields({ email: '', password: '' });
+        if (inputFields.email === '' || inputFields.password === '') {
             return toast({
                 title: "Invalid Credentials",
                 description: "Please check your email and password",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: 'top-center'
+            })
+        }
+
+        try {
+            const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(inputFields),
+            });
+            const data = await res.json();
+            if (res.status === 200) {
+                document.cookie = `token=${data.token}`;
+                navigate('/upload');
+            }
+            else {
+                setInputFields({ email: '', password: '' });
+                return toast({
+                    title: "Invalid Credentials",
+                    description: "Please check your email and password",
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                    position: 'top-center'
+                })
+            }
+
+        } catch (error) {
+            console.log(error.message)
+            setInputFields({ email: '', password: '' });
+            return toast({
+                title: "Server Error",
+                description: "Please try again later",
                 status: "error",
                 duration: 5000,
                 isClosable: true,
