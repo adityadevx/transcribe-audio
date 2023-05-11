@@ -146,6 +146,29 @@ const DownloadTable = () => {
 
         else {
             try {
+                if (checkdBoxId.length === 1) {
+                    try {
+                        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/singlefile?filename=${checkdBoxId[0].value}`);
+                        if (!res.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        const data = await res.blob();
+                        // console.log(data);
+                        const url = window.URL.createObjectURL(new Blob([data]));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', checkdBoxId[0].value.split('.')[0] + '.txt');
+                        link.click();
+                        link.remove();
+                        setCheckdBoxId([])
+                        return;
+                    } catch (error) {
+                        console.error('There was a problem with the fetch operation:', error);
+                    }
+                }
+
+
+
                 const fileNames = checkdBoxId.map((item) => item.value)
                 // add .txt to the file names
                 const newOk = fileNames.map((item) => item.split('.')[0] + '.txt')
