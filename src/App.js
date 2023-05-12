@@ -7,32 +7,14 @@ import Navbar from './components/Navbar';
 import ChangePassword from './components/ChangePassword';
 import Modal from './components/Modal';
 import ChangeKey from './components/ChangeKey';
+import UploadComponent from './components/UploadComponent';
+import Process from './components/Process';
 
 function App() {
   return (
     <>
       <Router>
-
         <Routes>
-          {/* <Route path="" element={
-            <>
-              <LoginState>
-                <Navbar />
-              </LoginState>
-              <Upload />
-            </>
-          } /> */}
-          <Route path="/upload" element={
-            <>
-              <LoginState>
-                <Navbar />
-              </LoginState>
-              <LoginState>
-                <Upload />
-              </LoginState>
-            </>
-
-          } />
           <Route path='/download' element={
             <>
               <LoginState>
@@ -67,40 +49,24 @@ function App() {
               <ChangeKey />
             </LoginState>
           } />
+          <Route path='/upload' element={
+            <>
+              <LoginState>
+                <Navbar />
+              </LoginState>
+              <UploadComponent />
+            </>
+          } />
+          <Route path='/process' element={
+            <>
+              <LoginState>
+                <Navbar />
+              </LoginState>
+              <Process />
+            </>
+          } />
         </Routes>
       </Router>
-
-      {
-        // userLoggedIn ?
-        //   <Router>
-        //     <Navbar />
-        //     <Routes>
-        //       {/*  root route */}
-        //       {/* <Route path="/" element={<Login />} />
-        //       <Route path="/login" element={<Login />} /> */}
-        //       <Route path="/upload" element={
-        //         <LoginState>
-        //           <Upload />
-        //         </LoginState>
-        //       } />
-        //       {/* <Route path="/download" element={<Download />} /> */}
-        //       <Route path='/download' element={
-        //         <LoginState>
-        //           <DownloadTable />
-        //         </LoginState>
-        //       } />
-        //     </Routes>
-        //   </Router>
-        //   :
-        //   <Router>
-        //     <Routes>
-        //       <Route path="/" element={<Login />} />
-        //       <Route path="/login" element={<Login />} />
-        //     </Routes>
-        //   </Router>
-      }
-
-
     </>
   );
 }

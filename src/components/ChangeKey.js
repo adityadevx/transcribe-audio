@@ -24,7 +24,7 @@ const ChangeKey = () => {
                 position: "top-center"
             })
         }
-        console.log('newKey', newKey)
+        // console.log('newKey', newKey)
         try {
             const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/keyreset`, {
                 method: 'POST',

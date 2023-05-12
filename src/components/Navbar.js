@@ -25,16 +25,7 @@ export default function Navbar() {
         navigate("/login")
     }
 
-    const handleLoginBtn = (e) => {
-        e.preventDefault();
-        if (loginBtn) {
-            Cookies.remove("token");
-            navigate("/login")
-        }
-        else {
-            navigate("/login")
-        }
-    }
+
 
 
     useEffect(() => {
