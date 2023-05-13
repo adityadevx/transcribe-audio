@@ -78,30 +78,23 @@ const Process = () => {
 
     return (
         <>
-            <Flex height="100vh" bg="gray.100" justify="center" align="center" p={8}>
+            <Flex height="100vh" bg="" justify="center" align="center" p={8}>
                 <Box
                     width="100%"
                     maxW="xl"
                     p={8}
                     bg="white"
                     borderRadius="md"
-                    boxShadow="md"
+                    boxShadow="lg"
+
                 >
                     <Heading size="md" mb={6} fontWeight="bold" textAlign="center">
                         Choose Your Configurations
                     </Heading>
                     <FormControl mb={8}>
                         <FormLabel fontWeight="semibold" bg="#adaff1" w='-webkit-fit-content' px={3} borderRadius={5}>Accuracy</FormLabel>
-                        <RadioGroup defaultValue="enhanced" onChange={handleAccuracyChange}>
-                            <Stack spacing={4} pl={5} >
-                                <Radio
-                                    value="enhanced"
-                                    size="md"
-                                    colorScheme="purple"
-                                    _focus={{ boxShadow: "none" }}
-                                >
-                                    Enhanced
-                                </Radio>
+                        <RadioGroup defaultValue="standard" onChange={handleAccuracyChange}>
+                            <Stack spacing={4} pl={5} direction={'row'} my={3} >
                                 <Radio
                                     value="standard"
                                     size="md"
@@ -110,13 +103,21 @@ const Process = () => {
                                 >
                                     Standard
                                 </Radio>
+                                <Radio
+                                    value="enhanced"
+                                    size="md"
+                                    colorScheme="purple"
+                                    _focus={{ boxShadow: "none" }}
+                                >
+                                    Enhanced
+                                </Radio>
                             </Stack>
                         </RadioGroup>
                     </FormControl>
                     <FormControl mb={8}>
                         <FormLabel fontWeight="semibold" bg='#e7c3b7' w='-webkit-fit-content' px={3} borderRadius={5}>Output Locale</FormLabel>
                         <RadioGroup defaultValue="en-US" onChange={handleOutputLocaleChange}>
-                            <Stack spacing={4} pl={5}>
+                            <Stack spacing={4} pl={5} direction={'row'} my={3}>
                                 <Radio
                                     value="en-US"
                                     size="md"
@@ -147,7 +148,7 @@ const Process = () => {
                     <FormControl mb={8}>
                         <FormLabel fontWeight="semibold" bg="#f1b4ce" w='-webkit-fit-content' px={3} borderRadius={5}>Diarization</FormLabel>
                         <RadioGroup defaultValue="none" onChange={handleDiarizationChange}>
-                            <Stack spacing={4} pl={5} >
+                            <Stack spacing={4} pl={5} direction={'row'} my={3} >
                                 <Radio
                                     value="none"
                                     size="md"
