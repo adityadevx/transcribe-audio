@@ -8,7 +8,7 @@ const Process = () => {
     const toast = useToast();
     const [outputLocale, setOutputLocale] = useState("en-US")
     const [diarization, setDiarization] = useState("none")
-    const [accuracy, setAccuracy] = useState("enhanced");
+    const [accuracy, setAccuracy] = useState("standard");
     const [transcribeBtnLoading, setTranscribeBtnLoading] = useState(false);
     const [availableFiles, setAvailableFiles] = useState([]);
 
