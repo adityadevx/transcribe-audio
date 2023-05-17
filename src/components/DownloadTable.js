@@ -11,7 +11,7 @@ const DownloadTable = () => {
     const toast = useToast();
     const [jobs, setJobs] = useState([])
     const [searchVal, setSearchVal] = useState('')
-    const [checkdBoxId, setCheckdBoxId] = useState([])
+    const [checkdBoxId, setCheckdBoxId] = useState([]);
     const [recordsPerPage, setRecordsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [disablePrev, setDisablePrev] = useState(false);
@@ -26,7 +26,6 @@ const DownloadTable = () => {
     const totalPages = Math.ceil(jobs.length / recordsPerPage);
 
     const handleHeaderCheckboxChange = (event) => {
-
         setHeaderCheckboxState(event.target.checked);
         if (event.target.checked) {
             setCheckdBoxId(jobs.map((item) => ({ id: item.id, value: item.data_name })));
@@ -122,12 +121,19 @@ const DownloadTable = () => {
         const { id, checked, value } = e.target;
         // console.log(id, checked, value);
         const obj = { id, value }
+        if (headerCheckboxState && !checked) {
+            setCheckdBoxId(checkdBoxId.filter((item) => item.id !== id));
+            setHeaderCheckboxState(false);
+            // console.log(checkdBoxId)
+        }
         if (checked) {
             setCheckdBoxId([...checkdBoxId, obj])
+            // console.log(checkdBoxId)
         }
         else {
             // setCheckdBoxId(checkdBoxId.filter((item) => item !== id))
             setCheckdBoxId(checkdBoxId.filter((item) => item.id !== id));
+            // console.log(checkdBoxId)
         }
     }
 
