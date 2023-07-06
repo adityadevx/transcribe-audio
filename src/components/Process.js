@@ -44,14 +44,15 @@ const Process = () => {
             const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/transcode`, body);
             if (res.status === 200) {
                 setTranscribeBtnLoading(false);
-                return toast({
-                    title: "Transcription Successful",
-                    description: "Your transcription is ready to download",
-                    status: "success",
-                    duration: 3000,
-                    isClosable: true,
-                    position: "top-center",
-                });
+                navigate('/download');
+                // return toast({
+                //     title: "Transcription Successful",
+                //     description: "Your transcription is ready to download",
+                //     status: "success",
+                //     duration: 3000,
+                //     isClosable: true,
+                //     position: "top-center",
+                // });
             }
         } catch (err) {
             console.log(err.message);

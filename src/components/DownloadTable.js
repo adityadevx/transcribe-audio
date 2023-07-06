@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, Link, Flex, Spacer, Select, InputGroup, InputRightElement, Input, Stack, Button, Checkbox, ButtonGroup, useToast } from "@chakra-ui/react"
-import { DownloadIcon, DeleteIcon } from '@chakra-ui/icons'
+import { DownloadIcon, DeleteIcon,RepeatIcon } from '@chakra-ui/icons'
 import { useNavigate } from 'react-router-dom'
 
 
@@ -18,12 +18,21 @@ const DownloadTable = () => {
     const [disableNext, setDisableNext] = useState(false);
     const [headerCheckboxState, setHeaderCheckboxState] = useState(false);
     const [filesDeleted, setFilesDeleted] = useState(0);
+    const [loading, setLoading] = useState(false);
 
     const lastIndexOfLastRecord = currentPage * recordsPerPage;
     const firstIndexOfLastRecord = lastIndexOfLastRecord - recordsPerPage;
 
     const currentRecords = jobs.slice(firstIndexOfLastRecord, lastIndexOfLastRecord);
     const totalPages = Math.ceil(jobs.length / recordsPerPage);
+
+    const handleRefresh = () => {
+        setLoading(true);
+        fetchJobs().finally(() => {
+            setLoading(false);
+        });
+    };
+
 
     const handleHeaderCheckboxChange = (event) => {
         setHeaderCheckboxState(event.target.checked);
@@ -430,7 +439,16 @@ const DownloadTable = () => {
                     <Button colorScheme='red' leftIcon={<DeleteIcon />}
                         onClick={e => handleDelete()}
                     >Delete</Button>
+                    <Button
+                        leftIcon={<RepeatIcon />}
+                        colorScheme="blue"
+                        onClick={handleRefresh}
+                        isLoading={loading}
+                    >
+                        Refresh
+                    </Button>
                 </ButtonGroup>
+
             </Flex>
         </>
     )
