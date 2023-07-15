@@ -1,7 +1,8 @@
 import { Flex, Stack, Box, Button, useColorModeValue, Heading, FormControl, FormLabel, Input, InputRightElement, InputGroup } from '@chakra-ui/react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
+import ReCAPTCHA from "react-google-recaptcha";
 
 
 
@@ -9,7 +10,8 @@ export default function Loign() {
     const navigate = useNavigate();
     const toast = useToast();
     const [show, setShow] = useState(false)
-    const handleClick = () => setShow(!show)
+    const handleClick = () => setShow(!show);
+    const recaptchaRef = useRef();
 
 
     const [inputFields, setInputFields] = useState({ email: '', password: '' });
@@ -20,6 +22,8 @@ export default function Loign() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+
         if (inputFields.email === '' || inputFields.password === '') {
             return toast({
                 title: "Invalid Credentials",
@@ -69,13 +73,31 @@ export default function Loign() {
             })
         }
     };
+
     useEffect(() => {
         if (document.cookie.includes('token')) {
             navigate('/upload');
         }
+        document.head.appendChild(document.createElement('script')).src = 'https://www.google.com/recaptcha/api.js'
+
     }, []);
 
+    async function onChange(value) {
+        console.log("Captcha value:", value);
+        const token = recaptchaRef.current.getValue();
+        console.log(token)
 
+        // verify the token on the server
+
+        const res = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `secret=${process.env.REACT_APP_RECAPTCHA_SECRET_KEY}&response=${token}`
+        })
+        const data = await res.json();
+        console.log(data)
+
+    }
 
     return (
         <Flex
@@ -128,6 +150,12 @@ export default function Loign() {
                                 required
                             /> */}
                         </FormControl>
+                        <ReCAPTCHA
+                            ref={recaptchaRef}
+                            sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+                            onChange={onChange}
+                        />
+
                         <Stack spacing={10}>
                             <Button
 

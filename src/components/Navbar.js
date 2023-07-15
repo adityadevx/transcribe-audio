@@ -4,8 +4,6 @@ import {
     useDisclosure, HStack
 } from '@chakra-ui/react';
 
-import LoginContext from '../context/LoginContext';
-import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import Cookies from 'js-cookie';
@@ -13,9 +11,6 @@ import Cookies from 'js-cookie';
 
 export default function Navbar() {
     const navigate = useNavigate();
-    // const { isOpen, onToggle } = useDisclosure();
-    const { validateLogin } = useContext(LoginContext);
-    const [loginBtn, setLoginBtn] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
 
@@ -28,14 +23,6 @@ export default function Navbar() {
 
 
 
-    useEffect(() => {
-        async function validate() {
-            const res = await validateLogin();
-            setLoginBtn(res);
-            // console.log(res)
-        }
-        validate();
-    }, [validateLogin]);
 
 
     const Links = ['Upload', 'Download'];
