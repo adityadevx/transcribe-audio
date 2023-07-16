@@ -11,7 +11,7 @@ export default function Loign() {
     const toast = useToast();
     const [show, setShow] = useState(false)
     const handleClick = () => setShow(!show);
-    const recaptchaRef = useRef();
+    const captchaRef = useRef(null);
 
 
     const [inputFields, setInputFields] = useState({ email: '', password: '' });
@@ -22,20 +22,33 @@ export default function Loign() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const captchaValue = captchaRef.current.getValue();
+        
 
-
-        if (inputFields.email === '' || inputFields.password === '') {
+        if (inputFields.email === '' || inputFields.password === '' || captchaValue === '') {
+            captchaRef.current.reset();
             return toast({
                 title: "Invalid Credentials",
-                description: "Please check your email and password",
+                description: "Please check your credentials or captcha",
                 status: "error",
                 duration: 5000,
                 isClosable: true,
                 position: 'top-center'
             })
         }
-
-        try {
+        if(!handleCaptcha(captchaValue)){
+            captchaRef.current.reset();
+            return toast({
+                title: "Invalid Captcha",
+                description: "Please try again",
+                status: "error",
+                duration: 2000,
+                isClosable: true,
+                position: 'top-center'
+            })
+        }
+        captchaRef.current.reset();
+     try {
             const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/login`, {
                 method: 'POST',
                 headers: {
@@ -78,26 +91,25 @@ export default function Loign() {
         if (document.cookie.includes('token')) {
             navigate('/upload');
         }
-        document.head.appendChild(document.createElement('script')).src = 'https://www.google.com/recaptcha/api.js'
-
     }, []);
 
-    async function onChange(value) {
+    const handleCaptcha = async (value) => {
         console.log("Captcha value:", value);
-        const token = recaptchaRef.current.getValue();
-        console.log(token)
+        const token =  captchaRef.current.getValue();
+      
+        try {
+            const res = await fetch(`https://www.google.com/recaptcha/api/siteverify?secret=${process.env.REACT_APP_RECAPTCHA_SECRET_KEY}&response=${token}`, {method: 'POST'})
 
-        // verify the token on the server
+            const data = await res.json();
+            console.log(data);
+            return data.success;   
+        } catch (error) {
+            captchaRef.current.reset();
+            return false;
+        }
 
-        const res = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `secret=${process.env.REACT_APP_RECAPTCHA_SECRET_KEY}&response=${token}`
-        })
-        const data = await res.json();
-        console.log(data)
+    };
 
-    }
 
     return (
         <Flex
@@ -143,18 +155,13 @@ export default function Loign() {
                                 </InputRightElement>
                             </InputGroup>
 
-                            {/* <Input type="password"
-                                value={inputFields.password}
-                                onChange={handleInputChange}
-                                name="password"
-                                required
-                            /> */}
                         </FormControl>
-                        <ReCAPTCHA
-                            ref={recaptchaRef}
-                            sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
-                            onChange={onChange}
-                        />
+                        <Stack spacing={10} >
+                            <ReCAPTCHA
+                                sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                                ref={captchaRef}
+                            />
+                        </Stack>
 
                         <Stack spacing={10}>
                             <Button
