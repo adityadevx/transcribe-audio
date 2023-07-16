@@ -98,7 +98,7 @@ export default function Loign() {
         const token =  captchaRef.current.getValue();
       
         try {
-            const res = await fetch(`https://www.google.com/recaptcha/api/siteverify?secret=${process.env.REACT_APP_RECAPTCHA_SECRET_KEY}&response=${token}`, {method: 'POST'})
+            const res = await fetch(`https://www.google.com/recaptcha/api/siteverify?secret=6Ld21CsnAAAAALVh7pHIKvBHNG0kTaq09PCTCavQ&response=${token}`, {method: 'POST'})
 
             const data = await res.json();
             console.log(data);
@@ -158,7 +158,7 @@ export default function Loign() {
                         </FormControl>
                         <Stack spacing={10} >
                             <ReCAPTCHA
-                                sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                                sitekey={"6Ld21CsnAAAAABt26sRBrwqzUkvdOgXr8EJFgrG9"}
                                 ref={captchaRef}
                             />
                         </Stack>
