@@ -3,6 +3,7 @@ import {
     useColorModeValue,
     useDisclosure, HStack
 } from '@chakra-ui/react';
+import NavLogo from './nav-logo.png'
 
 import { useNavigate } from 'react-router-dom';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
@@ -19,11 +20,6 @@ export default function Navbar() {
         Cookies.remove("token");
         navigate("/login")
     }
-
-
-
-
-
 
     const Links = ['Upload', 'Download'];
 
@@ -53,7 +49,9 @@ export default function Navbar() {
                         onClick={isOpen ? onClose : onOpen}
                     />
                     <HStack spacing={8} alignItems={'center'}>
-                        <Box fontSize={'xl'} fontWeight={600}>Transcribe</Box>
+                        <Box fontSize={'xl'} fontWeight={600}>
+                            <img src={NavLogo} alt='logo' width='60px' height='60px'  />
+                        </Box>
                         <HStack
                             as={'nav'}
                             spacing={4}

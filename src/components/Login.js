@@ -23,7 +23,7 @@ export default function Loign() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const captchaValue = captchaRef.current.getValue();
-        
+
 
         if (inputFields.email === '' || inputFields.password === '' || captchaValue === '') {
             captchaRef.current.reset();
@@ -36,7 +36,7 @@ export default function Loign() {
                 position: 'top-center'
             })
         }
-        if(!handleCaptcha(captchaValue)){
+        if (!handleCaptcha(captchaValue)) {
             captchaRef.current.reset();
             return toast({
                 title: "Invalid Captcha",
@@ -48,7 +48,7 @@ export default function Loign() {
             })
         }
         captchaRef.current.reset();
-     try {
+        try {
             const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/login`, {
                 method: 'POST',
                 headers: {
@@ -95,19 +95,18 @@ export default function Loign() {
 
     const handleCaptcha = async (value) => {
         console.log("Captcha value:", value);
-        const token =  captchaRef.current.getValue();
-      
+        const token = captchaRef.current.getValue();
+
         try {
-            const res = await fetch(`https://www.google.com/recaptcha/api/siteverify?secret=${process.env.REACT_APP_RECAPTCHA_SECRET_KEY}&response=${token}`, {method: 'POST'})
+            const res = await fetch(`https://www.google.com/recaptcha/api/siteverify?secret=${process.env.REACT_APP_RECAPTCHA_SECRET_KEY}&response=${token}`, { method: 'POST' })
 
             const data = await res.json();
             console.log(data);
-            return data.success;   
+            return data.success;
         } catch (error) {
             captchaRef.current.reset();
             return false;
         }
-
     };
 
 
@@ -156,13 +155,12 @@ export default function Loign() {
                             </InputGroup>
 
                         </FormControl>
-                        <Stack spacing={10} >
-                            <ReCAPTCHA
-                                sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
-                                ref={captchaRef}
-                            />
-                        </Stack>
-
+                        <ReCAPTCHA
+                            sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                            ref={captchaRef}
+                            // style={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'center' }}
+                            style={{width:'100%',  justifyContent:'center',display:'flex'}}
+                        />
                         <Stack spacing={10}>
                             <Button
 
