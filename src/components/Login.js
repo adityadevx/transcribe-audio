@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
 import ReCAPTCHA from "react-google-recaptcha";
+import logo from './nav-logo.png'
 
 
 
@@ -116,7 +117,12 @@ export default function Loign() {
             align={'center'}
             justify={'center'}
             bg={useColorModeValue('gray.50', 'gray.800')}>
-            <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+            <Stack spacing={10}  maxW={'lg'} py={12} >
+                <Stack align={'center'} justify={'center'}>
+                    <img src={logo} alt="logo"  width={'auto'}/>
+                </Stack>
+            </Stack>
+            <Stack spacing={8}  maxW={'lg'} py={12} px={6}>
                 <Stack align={'center'}>
                     <Heading fontSize={'4xl'}>Sign In to your account</Heading>
                 </Stack>
@@ -159,7 +165,7 @@ export default function Loign() {
                             sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
                             ref={captchaRef}
                             // style={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'center' }}
-                            style={{width:'100%',  justifyContent:'center',display:'flex'}}
+                            style={{ width: '100%', justifyContent: 'center', display: 'flex' }}
                         />
                         <Stack spacing={10}>
                             <Button
