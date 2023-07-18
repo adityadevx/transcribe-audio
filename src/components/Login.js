@@ -118,14 +118,11 @@ export default function Loign() {
             justify={'center'}
             bg={useColorModeValue('gray.50', 'gray.800')}>
             <Stack spacing={10}  maxW={'lg'} py={12} >
-                <Stack align={'center'} justify={'center'}>
+                <Stack align={'center'} justify={'center'} >
                     <img src={logo} alt="logo"  width={'auto'}/>
                 </Stack>
             </Stack>
-            <Stack spacing={8}  maxW={'lg'} py={12} px={6}>
-                <Stack align={'center'}>
-                    <Heading fontSize={'4xl'}>Sign In to your account</Heading>
-                </Stack>
+            <Stack spacing={8} maxW={'lg'} py={12}   paddingRight={'1rem'}>
                 <Box
                     rounded={'lg'}
                     bg={useColorModeValue('white', 'gray.700')}
