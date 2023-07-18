@@ -120,9 +120,10 @@ export default function Loign() {
             bg={useColorModeValue('gray.50', 'gray.800')}>
             <Stack spacing={8}  maxW={'lg'} py={1} >
                 <Stack align={'center'} justify={'center'} >
-                    <img src={logo} alt="logo"  width={'150px'} height={'150px'}/>
+                    <img src={logo} alt="logo"  width={'200px'} height={'200px'}/>
                 </Stack>
             </Stack>
+            <br />
             <Stack spacing={8} maxW={'lg'} py={5} px={4}>
                 <Box
                     rounded={'lg'}
