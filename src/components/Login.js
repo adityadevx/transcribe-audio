@@ -1,9 +1,9 @@
-import { Flex, Stack, Box, Button, useColorModeValue, Heading, FormControl, FormLabel, Input, InputRightElement, InputGroup } from '@chakra-ui/react';
+import { Flex, Stack, Box, Button, useColorModeValue, FormControl, FormLabel, Input, InputRightElement, InputGroup } from '@chakra-ui/react';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
 import ReCAPTCHA from "react-google-recaptcha";
-import logo from './nav-logo.png'
+import logo from './login-img.png'
 
 
 
@@ -116,13 +116,14 @@ export default function Loign() {
             minH={'100vh'}
             align={'center'}
             justify={'center'}
+            flexDirection={'column'}
             bg={useColorModeValue('gray.50', 'gray.800')}>
-            <Stack spacing={10}  maxW={'lg'} py={12} >
+            <Stack spacing={8}  maxW={'lg'} py={1} >
                 <Stack align={'center'} justify={'center'} >
-                    <img src={logo} alt="logo"  width={'auto'}/>
+                    <img src={logo} alt="logo"  width={'150px'} height={'150px'}/>
                 </Stack>
             </Stack>
-            <Stack spacing={8} maxW={'lg'} py={12}   paddingRight={'1rem'}>
+            <Stack spacing={8} maxW={'lg'} py={5} px={4}>
                 <Box
                     rounded={'lg'}
                     bg={useColorModeValue('white', 'gray.700')}
