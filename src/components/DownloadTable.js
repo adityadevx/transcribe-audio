@@ -190,7 +190,7 @@ const DownloadTable = () => {
                         'Content-Type': 'application/json',
                         'Accept': 'application/zip'
                     },
-                    body: JSON.stringify(newOk),
+                    body: JSON.stringify(checkdBoxId),
                 })
                 const data = await res.blob();
                 const url = window.URL.createObjectURL(new Blob([data]));
