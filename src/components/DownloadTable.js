@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, Box, Text, Link, Flex, Spacer, Select, InputGroup, InputRightElement, Input, Stack, Button, Checkbox, ButtonGroup, useToast } from "@chakra-ui/react"
-import { DownloadIcon, DeleteIcon,RepeatIcon } from '@chakra-ui/icons'
+import { DownloadIcon, DeleteIcon, RepeatIcon } from '@chakra-ui/icons'
 import { useNavigate } from 'react-router-dom'
 
 
@@ -68,7 +68,7 @@ const DownloadTable = () => {
             // fetching the file names from the download folder
             const downloadFolderItems = await fetch(`${process.env.REACT_APP_BASE_URL}/api/downloadlist`)
             const downloadlist = await downloadFolderItems.json()
-            // console.log(downloadlist)
+            // console.log(downloadlist, 'downloadlist')
 
 
             // fetching the jobs from the speechmatics api
@@ -78,19 +78,13 @@ const DownloadTable = () => {
                     Authorization: `Bearer ${keyData.key}`
                 }
             })
-            const { jobs } = await fetchedJobs.json()
-            // console.log(jobs)
+            const { jobs } = await fetchedJobs.json();
+            // console.log(jobs, 'jobs')
 
-            // filtering the jobs based on the file names in the download folder
-            const sameValues = jobs.filter((element) => downloadlist.includes(element.data_name.split(".")[0]));
-            // console.log(sameValues, 'sameValues')
+            const filteredJobs = jobs.filter(job => downloadlist.includes(job.id));
 
-            // removing the duplicate values from the array
-            const filteredArr = sameValues.filter((item, index, self) => {
-                return self.findIndex(i => i.data_name === item.data_name) === index;
-            });
-            // console.log(filteredArr, 'filteredArr')
-            setJobs(filteredArr)
+
+            setJobs(filteredJobs)
         } catch (error) {
             // console.log(error)
             return toast({
@@ -163,7 +157,7 @@ const DownloadTable = () => {
             try {
                 if (checkdBoxId.length === 1) {
                     try {
-                        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/singlefile?filename=${checkdBoxId[0].value}`);
+                        const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/singlefile?filename=${checkdBoxId[0].id}`);
                         if (!res.ok) {
                             throw new Error('Network response was not ok');
                         }
@@ -184,7 +178,8 @@ const DownloadTable = () => {
 
 
 
-                const fileNames = checkdBoxId.map((item) => item.value)
+                const fileNames = checkdBoxId.map((item) => item.id)
+               
                 // add .txt to the file names
                 const newOk = fileNames.map((item) => item.split('.')[0] + '.txt')
 
@@ -224,7 +219,7 @@ const DownloadTable = () => {
         // console.log('delete')
         if (checkdBoxId.length > 0) {
             try {
-                const files = checkdBoxId.map((item) => item.value.split('.')[0] + '.txt')
+                const files = checkdBoxId.map((item) => item.id.split('.')[0] + '.txt')
                 const res = await fetch(`${process.env.REACT_APP_BASE_URL}/api/delete`, {
                     method: 'POST',
                     headers: {
