@@ -21,10 +21,9 @@ import {
   CardBody,
   CardFooter,
 } from "@chakra-ui/react";
-import { ArrowForwardIcon, DeleteIcon } from "@chakra-ui/icons";
+
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { MdFileUpload } from "react-icons/md";
 
 const UploadComponent = () => {
   const toast = useToast();
@@ -41,7 +40,6 @@ const UploadComponent = () => {
   const fileInputBg = useColorModeValue("purple.100", "gray.800");
   const fileTextColor = useColorModeValue("gray.600", "gray.200");
   const fileSubTextColor = useColorModeValue("gray.500", "gray.300");
-  const boxBgColor = useColorModeValue("white", "gray.700");
 
   const handleFiles = (newFiles) => {
     setFiles((prevFiles) => [...prevFiles, ...newFiles]);
@@ -402,9 +400,13 @@ const UploadComponent = () => {
                   size={{ base: "md", md: "lg" }}
                   mt={4}
                   borderRadius="full"
+                  isDisabled={audioFiles.length === 0}
                   // rightIcon={<ArrowForwardIcon />}
                   _hover={{ bg: "purple" }}
                   transition="all 0.3s ease"
+                  onClick={() => {
+                    navigate("/process");
+                  }}
                 >
                   Move to Process
                 </Button>
