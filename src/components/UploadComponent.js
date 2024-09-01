@@ -172,12 +172,13 @@ const UploadComponent = () => {
     setSelectAll(!selectAll);
   };
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
+  const handleDragOver = (e) => e.preventDefault();
+
+  const handleDragLeave = (e) => e.preventDefault();
 
   const handleDrop = (e) => {
     e.preventDefault();
+
     const droppedFiles = Array.from(e.dataTransfer.files);
     handleFiles(droppedFiles);
   };
@@ -225,7 +226,13 @@ const UploadComponent = () => {
                 once.
               </Text>
             </CardHeader>
-            <CardBody flex={1} height={"full"}>
+            <CardBody
+              flex={1}
+              height={"full"}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
               <input
                 type="file"
                 style={{ display: "none" }}
@@ -339,7 +346,6 @@ const UploadComponent = () => {
                     scrollbarWidth: "thin",
                   }}
                   className="my-scrollable-element"
-                  // maxH={{ base: "full", md: "300px" }}
                 >
                   <Table variant="simple">
                     <Thead>
@@ -377,7 +383,6 @@ const UploadComponent = () => {
                   audioFiles.length === 0 ? "center" : "space-between"
                 }
                 alignItems="center"
-                // flexDirection={{ base: "column", md: "row" }}
                 w="full"
               >
                 {audioFiles.length > 0 && (
@@ -386,7 +391,6 @@ const UploadComponent = () => {
                     size={{ base: "md", md: "lg" }}
                     mt={4}
                     borderRadius="full"
-                    // leftIcon={<DeleteIcon />}
                     onClick={handleDelete}
                     isDisabled={selectedFiles.length === 0}
                     _hover={{ bg: "red.500" }}
@@ -401,7 +405,6 @@ const UploadComponent = () => {
                   mt={4}
                   borderRadius="full"
                   isDisabled={audioFiles.length === 0}
-                  // rightIcon={<ArrowForwardIcon />}
                   _hover={{ bg: "purple" }}
                   transition="all 0.3s ease"
                   onClick={() => {
