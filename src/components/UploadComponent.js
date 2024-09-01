@@ -7,13 +7,8 @@ import {
   Text,
   useColorModeValue,
   useToken,
-} from "@chakra-ui/react";
-import { DeleteIcon } from "@chakra-ui/icons";
-import { useToast } from "@chakra-ui/react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { Checkbox } from "@chakra-ui/react";
-import {
+  Checkbox,
+  useToast,
   Table,
   Thead,
   Tbody,
@@ -21,7 +16,15 @@ import {
   Th,
   Td,
   TableContainer,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
 } from "@chakra-ui/react";
+import { ArrowForwardIcon, DeleteIcon } from "@chakra-ui/icons";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { MdFileUpload } from "react-icons/md";
 
 const UploadComponent = () => {
   const toast = useToast();
@@ -32,6 +35,7 @@ const UploadComponent = () => {
   const [color] = useToken("colors", ["blue.400"]);
   const [audioFiles, setAudioFiles] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
   const [uploadReRender, setUploadReRender] = useState(false);
 
   const fileInputBg = useColorModeValue("purple.100", "gray.800");
@@ -119,6 +123,7 @@ const UploadComponent = () => {
 
       setUploadReRender(!uploadReRender);
       setSelectedFiles([]);
+      setSelectAll(false);
       return toast({
         title: "Files Deleted",
         description: "Selected files have been deleted successfully",
@@ -160,6 +165,15 @@ const UploadComponent = () => {
     );
   };
 
+  const handleSelectAllChange = () => {
+    if (selectAll) {
+      setSelectedFiles([]);
+    } else {
+      setSelectedFiles(audioFiles);
+    }
+    setSelectAll(!selectAll);
+  };
+
   const handleDragOver = (e) => {
     e.preventDefault();
   };
@@ -179,18 +193,41 @@ const UploadComponent = () => {
 
   return (
     <>
-      <Flex flexWrap="wrap" justifyContent="center" mt={2}>
-        <Box w={{ base: "100%", md: "50%" }} p={6} my={{ base: "4", md: "0" }}>
-          <Center minH={"-moz-fit-content"}>
-            <Box
-              borderWidth="1px"
-              borderRadius="xl"
-              p="10"
-              boxShadow="xl"
-              bg={boxBgColor}
-              onDragOver={handleDragOver}
-              onDrop={handleDrop}
-            >
+      <Flex
+        direction={{ base: "column", md: "row" }}
+        justifyContent="center"
+        alignItems="stretch"
+        spacing={10}
+        height={"auto"}
+        mt={5}
+      >
+        <Box
+          textAlign={"center"}
+          bg="white"
+          p={{ base: 4, md: 10 }}
+          rounded="xl"
+          boxShadow="lg"
+          flex={1}
+          minH="500px"
+          display="flex"
+          flexDirection="column"
+        >
+          <Card
+            height={"100%"}
+            display="flex"
+            flexDirection="column"
+            shadow={"none"}
+          >
+            <CardHeader>
+              <Text fontSize="3xl" fontWeight="bold" color="purple.600">
+                Upload Audio Files
+              </Text>
+              <Text fontSize="md" color="gray.500" mt={2}>
+                Upload your audio files here. You can upload multiple files at
+                once.
+              </Text>
+            </CardHeader>
+            <CardBody flex={1} height={"full"}>
               <input
                 type="file"
                 style={{ display: "none" }}
@@ -204,174 +241,176 @@ const UploadComponent = () => {
                   direction="column"
                   alignItems="center"
                   justifyContent="center"
-                  borderWidth="3px"
+                  borderWidth="2px"
                   borderStyle="dashed"
                   borderColor={borderColor}
                   borderRadius="xl"
-                  py="12"
-                  px="16"
+                  py="10"
+                  px="12"
+                  height={"full"}
                   cursor="pointer"
                   _hover={{
                     bg: fileInputBg,
                     borderColor: color,
                   }}
+                  transition="all 0.3s ease"
+                  flex={1}
                 >
                   <Text
                     fontWeight="semibold"
-                    fontSize={{
-                      base: "sm",
-                      md: "md",
-                      lg: "lg",
-                      xl: "xl",
-                      "2xl": "2xl",
-                    }}
+                    fontSize="lg"
                     textAlign="center"
                     color={fileTextColor}
-                    mb="2"
+                    mb={2}
                   >
                     Drag and drop your files here <br /> or click to browse
                   </Text>
                   <Text
-                    fontSize="md"
+                    fontSize="sm"
                     color={fileSubTextColor}
-                    fontWeight={"medium"}
+                    fontWeight="medium"
                   >
                     {files.length === 0
                       ? "Any audio file up to 500MB"
-                      : files.length + " files selected"}
+                      : `${files.length} file(s) selected`}
                   </Text>
                 </Flex>
               </label>
-            </Box>
-          </Center>
-          <Flex justifyContent="center" alignItems="center" mt={4}>
-            <Button
-              colorScheme="purple"
-              size="lg"
-              mt="8"
-              w="auto"
-              borderRadius={"2xl"}
-              isLoading={uploadBtnLoading}
-              onClick={handleUpload}
-            >
-              Upload
-            </Button>
-          </Flex>
-        </Box>
-        <Box w={{ base: "100%", md: "50%" }} p={6}>
-          <Flex justifyContent="center" alignItems="center" mb={4}>
-            <Text fontSize="2xl" fontWeight="bold" color="gray.800">
-              Uploaded Files
-            </Text>
-          </Flex>
-          <Box
-            scrollBehavior={"smooth"}
-            overflowY="scroll"
-            css={{
-              "&::-webkit-scrollbar": {
-                width: "8px",
-              },
-              "&::-webkit-scrollbar-track": {
-                background: "transparent",
-              },
-              "&::-webkit-scrollbar-thumb": {
-                background: "gray.400",
-                borderRadius: "full",
-              },
-            }}
-            maxHeight="400px"
-          >
-            {audioFiles.length === 0 ? (
-              <Flex height={"150px"} justify={"center"} alignItems={"center"}>
-                <Text
-                  fontSize="lg"
-                  fontWeight="bold"
-                  color="gray.800"
-                  textAlign="center"
+            </CardBody>
+            <CardFooter p={{ sm: "1" }}>
+              <Flex justifyContent="center" alignItems="center" w="full">
+                <Button
+                  colorScheme="purple"
+                  size={{ base: "md", md: "lg" }}
+                  mt={4}
+                  w="auto"
+                  borderRadius="full"
+                  isDisabled={files.length === 0}
+                  isLoading={uploadBtnLoading}
+                  onClick={handleUpload}
+                  _hover={{ bg: "purple.500" }}
+                  transition="all 0.3s ease"
                 >
-                  No Files Uploaded
-                </Text>
+                  Upload Files
+                </Button>
               </Flex>
-            ) : (
-              <>
-                <TableContainer p={2} bg={"gray.50"} rounded={"lg"}>
+            </CardFooter>
+          </Card>
+        </Box>
+
+        <Box
+          textAlign={"center"}
+          bg="white"
+          p={{ base: 4, md: 10 }}
+          rounded="xl"
+          boxShadow="lg"
+          flex={1}
+          minH="500px"
+          display="flex"
+          flexDirection="column"
+          ml={{ md: 4 }}
+          mt={{ base: 4, md: 0 }}
+        >
+          <Card
+            height="100%"
+            display="flex"
+            flexDirection="column"
+            shadow={"none"}
+          >
+            <CardHeader>
+              <Text fontSize="3xl" fontWeight="bold" color="red.600">
+                Manage Audio Files
+              </Text>
+              <Text fontSize="md" color="gray.500" mt={2}>
+                Manage your uploaded audio files. You can delete selected files.
+              </Text>
+            </CardHeader>
+            <CardBody flex={1} padding={{ base: 0 }}>
+              {audioFiles.length === 0 ? (
+                <Center height={"full"}>
+                  <Text fontSize="xl" color="gray.500" fontWeight={"semibold"}>
+                    No audio files available.
+                  </Text>
+                </Center>
+              ) : (
+                <TableContainer
+                  style={{
+                    maxHeight: "300px",
+                    overflowY: "auto",
+                    scrollbarColor: "#6B46C1",
+                    scrollbarWidth: "thin",
+                  }}
+                  className="my-scrollable-element"
+                  // maxH={{ base: "full", md: "300px" }}
+                >
                   <Table variant="simple">
                     <Thead>
                       <Tr>
-                        <Th fontSize={"lg"}>File Name</Th>
                         <Th>
                           <Checkbox
-                            isChecked={
-                              audioFiles.length > 0 &&
-                              selectedFiles.length === audioFiles.length
-                            }
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                setSelectedFiles(audioFiles);
-                              } else {
-                                setSelectedFiles([]);
-                              }
-                            }}
-                            colorScheme="green"
+                            isChecked={selectAll}
+                            onChange={handleSelectAllChange}
                           ></Checkbox>
                         </Th>
+                        <Th fontSize={"md"}>File Name</Th>
                       </Tr>
                     </Thead>
                     <Tbody>
                       {audioFiles.map((file, index) => (
                         <Tr key={index}>
-                          <Td fontSize={"md"} fontWeight={"medium"}>
-                            {file}
-                          </Td>
                           <Td>
                             <Checkbox
-                              colorScheme={"green"}
                               isChecked={selectedFiles.includes(file)}
                               onChange={() => handleCheckboxChange(file)}
                             />
                           </Td>
+                          <Td fontSize={{ base: "sm", md: "md" }}>{file}</Td>
                         </Tr>
                       ))}
                     </Tbody>
                   </Table>
                 </TableContainer>
-                <Flex width={"full"} justify={"end"}>
+              )}
+            </CardBody>
+
+            <CardFooter p={{ sm: 1 }}>
+              <Flex
+                justifyContent={
+                  audioFiles.length === 0 ? "center" : "space-between"
+                }
+                alignItems="center"
+                // flexDirection={{ base: "column", md: "row" }}
+                w="full"
+              >
+                {audioFiles.length > 0 && (
                   <Button
                     colorScheme="red"
-                    size="md"
-                    justifyContent={"end"}
+                    size={{ base: "md", md: "lg" }}
                     mt={4}
+                    borderRadius="full"
+                    // leftIcon={<DeleteIcon />}
                     onClick={handleDelete}
                     isDisabled={selectedFiles.length === 0}
+                    _hover={{ bg: "red.500" }}
+                    transition="all 0.3s ease"
                   >
-                    <DeleteIcon mr={2} />
-                    Delete
+                    Delete Selected
                   </Button>
-                </Flex>
-              </>
-            )}
-            <Flex justifyContent="center" mt={8}>
-              <Button
-                isDisabled={audioFiles.length === 0}
-                colorScheme="purple"
-                position={"absolute"}
-                bottom={0}
-                size="md"
-                fontWeight="semibold"
-                px={10}
-                py={6}
-                letterSpacing="wide"
-                textTransform="uppercase"
-                borderRadius="full"
-                boxShadow="md"
-                onClick={() => {
-                  navigate("/process");
-                }}
-              >
-                Move To Process
-              </Button>
-            </Flex>
-          </Box>
+                )}
+                <Button
+                  colorScheme="purple"
+                  size={{ base: "md", md: "lg" }}
+                  mt={4}
+                  borderRadius="full"
+                  // rightIcon={<ArrowForwardIcon />}
+                  _hover={{ bg: "purple" }}
+                  transition="all 0.3s ease"
+                >
+                  Move to Process
+                </Button>
+              </Flex>
+            </CardFooter>
+          </Card>
         </Box>
       </Flex>
     </>
