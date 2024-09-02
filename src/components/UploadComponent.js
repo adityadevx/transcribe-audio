@@ -356,7 +356,7 @@ const UploadComponent = () => {
                             onChange={handleSelectAllChange}
                           ></Checkbox>
                         </Th>
-                        <Th fontSize={"md"}>File Name</Th>
+                        <Th fontSize={"md"}></Th>
                       </Tr>
                     </Thead>
                     <Tbody>
