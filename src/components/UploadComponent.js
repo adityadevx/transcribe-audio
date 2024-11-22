@@ -276,7 +276,7 @@ const UploadComponent = () => {
                     fontWeight="medium"
                   >
                     {files.length === 0
-                      ? "Any audio file up to 500MB"
+                      ? "Any audio file up to 540MB"
                       : `${files.length} file(s) selected`}
                   </Text>
                 </Flex>
